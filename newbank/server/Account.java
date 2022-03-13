@@ -10,6 +10,9 @@ public class Account {
 		this.openingBalance = openingBalance;
 	}
 	
+	public String getName(){
+		return accountName;
+	}
 	public String toString() {
 		return (accountName + ": " + openingBalance);
 	}
