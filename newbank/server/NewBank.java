@@ -42,6 +42,7 @@ public class NewBank {
 		if(customers.containsKey(customer.getKey())) {
 			switch(request) {
 			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
+			case "NEWACCOUNT":	 newAccount(customer, request);
 			case "EXIT" : return "DISCONNECTING";
 			default : return "FAIL";
 			}
@@ -51,6 +52,16 @@ public class NewBank {
 	
 	private String showMyAccounts(CustomerID customer) {
 		return (customers.get(customer.getKey())).accountsToString();
+	}
+
+	private void newAccount(CustomerID customer, String name) {
+		Customer c = customers.get(customer.getKey());
+		if (c.isNewAccountNameValid(name)) {
+			c.addAccount(new Account(name, 0));
+			System.out.println("SUCCESS");
+		} else {
+			System.out.println("FAIL");
+		}
 	}
 
 }
