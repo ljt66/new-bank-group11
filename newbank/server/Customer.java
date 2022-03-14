@@ -21,4 +21,13 @@ public class Customer {
 	public void addAccount(Account account) {
 		accounts.add(account);		
 	}
+
+	public boolean isNewAccountNameValid(String name){
+		//Method to check whether a customer already has an account name matching a name intended to be used to create a new account
+		boolean isValid = true;
+		for (Account account : accounts) {
+			if(account.getName().equals(name)){isValid = false;}
+		}
+		return isValid;
+	}
 }
