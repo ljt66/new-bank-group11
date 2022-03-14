@@ -25,7 +25,12 @@ public class ExampleClient extends Thread{
 				try {
 					while(true) {
 						String responce = bankServerIn.readLine();
-						System.out.println(responce);
+						if (responce != null) {
+							System.out.println(responce);
+						} else {
+							userInput.close();
+							break;
+						}
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -45,8 +50,7 @@ public class ExampleClient extends Thread{
 					bankServerOut.println(command);
 				}				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				break;
 			}
 		}
 	}
