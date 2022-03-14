@@ -39,6 +39,9 @@ public class NewBankClientHandler extends Thread{
 					System.out.println("Request from " + customer.getKey());
 					String responce = bank.processRequest(customer, request);
 					out.println(responce);
+					if (responce.equals("DISCONNECTING")) {
+						break;
+					}
 				}
 			}
 			else {

@@ -42,6 +42,7 @@ public class NewBank {
 		if(customers.containsKey(customer.getKey())) {
 			switch(request) {
 			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
+			case "EXIT" : return "DISCONNECTING";
 			default : return "FAIL";
 			}
 		}
