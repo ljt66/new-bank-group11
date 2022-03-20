@@ -14,6 +14,10 @@ public class Account {
 		return accountName;
 	}
 
+	public double updateBalance(double amount){
+		openingBalance += amount;
+	}
+
 	public String toString() {
 		return (accountName + ": " + openingBalance);
 	}

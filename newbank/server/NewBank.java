@@ -43,6 +43,7 @@ public class NewBank {
 			switch(request) {
 			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
 			case "NEWACCOUNT":	 newAccount(customer, request);
+			case "MOVE": move(customer, amount, fromAccountName, toAccountName);
 			case "EXIT" : return "DISCONNECTING";
 			default : return "FAIL";
 			}
@@ -62,6 +63,24 @@ public class NewBank {
 		} else {
 			System.out.println("FAIL");
 		}
+	}
+
+	private void move (CustomerID customer, double amount, String fromAccountName, String toAccountName){
+		Customer c = customers.get(customer.getKey());
+		if (c.isValidAccount(fromAccountName) && c.isValidAccount(toAccountName)){
+			if (fromAccountName >= toAccountName){
+				c.updateAccount(toAccountName, amount);
+				c.updateAccount(fromAccountName, -amount);
+				System.out.println("SUCCESS");
+			}
+			else{
+				System.out.println("FAIL");
+			}
+		}
+		else{
+			System.out.println("FAIL");
+		}
+
 	}
 
 }

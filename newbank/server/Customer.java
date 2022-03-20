@@ -22,11 +22,29 @@ public class Customer {
 		accounts.add(account);		
 	}
 
+	public void updateAccount(String name, double amount)
+	{
+		for (Account account : accounts) {
+			if(account.getName().equals(name)){
+				account.updateBalance(amount);
+			}
+		}
+	}
+
 	public boolean isNewAccountNameValid(String name){
 		//Method to check whether a customer already has an account name matching a name intended to be used to create a new account
 		boolean isValid = true;
 		for (Account account : accounts) {
 			if(account.getName().equals(name)){isValid = false;}
+		}
+		return isValid;
+	}
+
+	public boolean isValidAccount(String name){
+		// Method to check a customer has valid accounts open
+		boolean isValid = true;
+		for (Account account : accounts) {
+			if(account.getName().equals(name)){isValid = true;}
 		}
 		return isValid;
 	}
