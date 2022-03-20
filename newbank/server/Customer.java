@@ -22,6 +22,21 @@ public class Customer {
 		accounts.add(account);		
 	}
 
+	public void withdraw(double amount) {
+		for (Account a : accounts) {
+			if (amount <= a.getBalance()) {
+				a.withdraw(amount);
+				return;
+			}
+		}
+		System.out.println("Cannot withdraw " + amount+ " from any account.");
+	}
+
+	public void deposit(double amount) {
+		accounts.get(0).deposit(amount);
+		return;
+	}
+
 	public boolean isNewAccountNameValid(String name){
 		//Method to check whether a customer already has an account name matching a name intended to be used to create a new account
 		boolean isValid = true;
