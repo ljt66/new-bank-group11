@@ -25,6 +25,11 @@ public class NewBank {
 		john.addAccount(new Account("Checking", 250.0));
 		customers.put("John", john);
 	}
+
+	public void addCustomer(String name) {
+		Customer customer = new Customer();
+		customers.put(name, customer);
+	}
 	
 	public static NewBank getBank() {
 		return bank;
@@ -43,7 +48,7 @@ public class NewBank {
 		if(customers.containsKey(customer.getKey())) {
 			switch(req[0]) {
 			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
-			case "NEWACCOUNT":	 newAccount(customer, req[1]);
+			case "NEWACCOUNT":	return newAccount(customer, req[1]);
 			case "PAY": return payAccount(customer, req);
 			case "EXIT" : return "DISCONNECTING";
 			default : return "FAIL";
@@ -60,24 +65,25 @@ public class NewBank {
 		//potential to ask customer using accountsToString method, what account they wish to pay from
 		if (customers.containsKey(request[1])) {
 			Customer payee = customers.get(request[1]);
-			c.withdraw(amount);
-			payee.deposit(amount);
-			return "SUCCESS";
+			if (c.withdraw(amount)) {
+				payee.deposit(amount);
+				return "SUCCESS";
+			};
 		}
-		return "FAIL2";
+		return "FAIL";
 	}
 
 	private String showMyAccounts(CustomerID customer) {
 		return (customers.get(customer.getKey())).accountsToString();
 	}
 
-	private void newAccount(CustomerID customer, String name) {
+	private String newAccount(CustomerID customer, String name) {
 		Customer c = customers.get(customer.getKey());
 		if (c.isNewAccountNameValid(name)) {
 			c.addAccount(new Account(name, 0));
-			System.out.println("SUCCESS");
+			return "SUCCESS";
 		} else {
-			System.out.println("FAIL");
+			return "FAIL";
 		}
 	}
 
