@@ -39,12 +39,11 @@ public class NewBank {
 
 	// commands from the NewBank customer are processed in this method
 	public synchronized String processRequest(CustomerID customer, String request) {
-		String[] req = request.split(" ");
 		if(customers.containsKey(customer.getKey())) {
-			switch(req[0]) {
+			switch(request) {
 			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
-			case "NEWACCOUNT":	 newAccount(customer, req[1]);
-			case "PAY": return payAccount(customer, req);
+			case "NEWACCOUNT":	 newAccount(customer, request);
+			case "MOVE": move(customer, request);
 			case "EXIT" : return "DISCONNECTING";
 			default : return "FAIL";
 			}
@@ -52,21 +51,6 @@ public class NewBank {
 		return "FAIL";
 	}
 	
-	//pays ammount requested from customer's first account with the correct balance
-	//to payee's first account
-	private String payAccount(CustomerID customer, String[] request) {
-		double amount = Double.parseDouble(request[2]);
-		Customer c = customers.get(customer.getKey());
-		//potential to ask customer using accountsToString method, what account they wish to pay from
-		if (customers.containsKey(request[1])) {
-			Customer payee = customers.get(request[1]);
-			c.withdraw(amount);
-			payee.deposit(amount);
-			return "SUCCESS";
-		}
-		return "FAIL2";
-	}
-
 	private String showMyAccounts(CustomerID customer) {
 		return (customers.get(customer.getKey())).accountsToString();
 	}
@@ -80,5 +64,28 @@ public class NewBank {
 			System.out.println("FAIL");
 		}
 	}
+
+	private void move (CustomerID customer, String request){
+		Customer c = customers.get(customer.getKey());
+		String [] splitString = request.split(" ");
+		double amount = Double.parseDouble(splitString[0]);
+		String fromAccountName = splitString[1];
+		String toAccountName = splitString[2];
+
+		if (c.isValidAccount(fromAccountName) && c.isValidAccount(toAccountName) && c.isDouble(amount)){
+			if (fromAccountName >= toAccountName){
+				c.updateAccount(toAccountName, amount);
+				c.updateAccount(fromAccountName, -amount);
+				System.out.println("SUCCESS");
+			}
+			else{
+				System.out.println("FAIL");
+			}
+		}
+		else{
+			System.out.println("FAIL");
+		}
+	}
+
 
 }

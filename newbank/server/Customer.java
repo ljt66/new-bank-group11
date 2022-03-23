@@ -22,19 +22,13 @@ public class Customer {
 		accounts.add(account);		
 	}
 
-	public void withdraw(double amount) {
-		for (Account a : accounts) {
-			if (amount <= a.getBalance()) {
-				a.withdraw(amount);
-				return;
+	public void updateAccount(String name, double amount)
+	{
+		for (Account account : accounts) {
+			if(account.getName().equals(name)){
+				account.updateBalance(amount);
 			}
 		}
-		System.out.println("Cannot withdraw " + amount+ " from any account.");
-	}
-
-	public void deposit(double amount) {
-		accounts.get(0).deposit(amount);
-		return;
 	}
 
 	public boolean isNewAccountNameValid(String name){
@@ -44,5 +38,24 @@ public class Customer {
 			if(account.getName().equals(name)){isValid = false;}
 		}
 		return isValid;
+	}
+
+	public boolean isValidAccount(String name){
+		// Method to check a customer has valid accounts open
+		boolean isValid = false;
+		for (Account account : accounts) {
+			if(account.getName().equals(name)){isValid = true;}
+		}
+		return isValid;
+	}
+
+	public bool isDouble(Object obj) {
+		// Method to check amount is of double format
+		try {
+			Double.valueOf(obj);
+		} catch (Exception ex){
+			return (false);
+		}
+		return (true);
 	}
 }
