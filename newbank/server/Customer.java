@@ -22,14 +22,15 @@ public class Customer {
 		accounts.add(account);		
 	}
 
-	public void withdraw(double amount) {
+	public boolean withdraw(double amount) {
 		for (Account a : accounts) {
 			if (amount <= a.getBalance()) {
 				a.withdraw(amount);
-				return;
+				return true;
 			}
 		}
 		System.out.println("Cannot withdraw " + amount+ " from any account.");
+		return false;
 	}
 
 	public void deposit(double amount) {
