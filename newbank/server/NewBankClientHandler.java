@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class NewBankClientHandler extends Thread{
 	
 	private NewBank bank;
 	private BufferedReader in;
 	private PrintWriter out;
+	private String[] commands = {"SHOWMYACCOUNTS", "NEWACCOUNT", "PAY", "EXIT"};
 	
 	
 	public NewBankClientHandler(Socket s) throws IOException {
@@ -36,8 +38,18 @@ public class NewBankClientHandler extends Thread{
 				out.println("Log In Successful. What do you want to do?");
 				while(true) {
 					String request = in.readLine();
-					System.out.println("Request from " + customer.getKey());
-					String responce = bank.processRequest(customer, request);
+					String[] req = request.split(" ");
+					String responce;
+					if (Arrays.stream(commands).anyMatch(req[0]::equals)) {
+						System.out.println("Request from " + customer.getKey());
+						responce = bank.processRequest(customer, request);
+					} else {
+						System.out.println("Invalid request from " + customer.getKey());
+						responce = "Valid commands:\n";
+						for (String s : commands) {
+							responce += s + "\n";
+						}
+					}
 					out.println(responce);
 					if (responce.equals("DISCONNECTING")) {
 						break;
