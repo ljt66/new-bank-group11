@@ -8,14 +8,14 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class NewBankClientHandler extends Thread{
-	
+
 	private NewBank bank;
 	private BufferedReader in;
 	private PrintWriter out;
 	private HashMap<String, Integer> commands;
-	private String[] command_examples = {"SHOWMYACCOUNTS", "NEWACCOUNT name", "PAY Payee 0.00", "EXIT"};
-	
-	
+	private String[] command_examples = {"SHOWMYACCOUNTS", "NEWACCOUNT name", "MOVE 0.00 From To", "PAY Payee 0.00", "EXIT", "PRINTMENU"};
+
+
 	public NewBankClientHandler(Socket s) throws IOException {
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -23,10 +23,12 @@ public class NewBankClientHandler extends Thread{
 		commands = new HashMap<>();
 		commands.put("SHOWMYACCOUNTS", 1);
 		commands.put("NEWACCOUNT", 2);
+		commands.put("MOVE", 4);
 		commands.put("PAY", 3);
 		commands.put("EXIT", 1);
+		commands.put("PRINTMENU", 1);
 	}
-	
+
 	public void run() {
 		// keep getting requests from the client and processing them
 		try {
@@ -39,7 +41,7 @@ public class NewBankClientHandler extends Thread{
 			out.println("Checking Details...");
 			// authenticate user and get customer ID token from bank for use in subsequent requests
 			CustomerID customer = bank.checkLogInDetails(userName, password);
-			// if the user is authenticated then get requests from the user and process them 
+			// if the user is authenticated then get requests from the user and process them
 			if(customer != null) {
 				out.println("Log In Successful. What do you want to do?");
 				while(true) {
