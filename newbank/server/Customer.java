@@ -1,25 +1,25 @@
 package newbank.server;
 
-import java.util.ArrayList;
+		import java.util.ArrayList;
 
 public class Customer {
-	
+
 	private ArrayList<Account> accounts;
-	
+
 	public Customer() {
 		accounts = new ArrayList<>();
 	}
-	
+
 	public String accountsToString() {
 		String s = "";
 		for(Account a : accounts) {
-			s += a.toString();
+			s += a.toString() + "\n";
 		}
 		return s;
 	}
 
 	public void addAccount(Account account) {
-		accounts.add(account);		
+		accounts.add(account);
 	}
 
 	public boolean withdraw(double amount) {
@@ -45,5 +45,33 @@ public class Customer {
 			if(account.getName().equals(name)){isValid = false;}
 		}
 		return isValid;
+	}
+
+	public void updateAccount(String name, double amount)
+	{
+		for (Account account : accounts) {
+			if(account.getName().equals(name)){
+				account.deposit(amount);
+			}
+		}
+	}
+
+	public boolean isValidAccount(String name){
+		// Method to check a customer has valid accounts open
+		boolean isValid = false;
+		for (Account account : accounts) {
+			if(account.getName().equals(name)){isValid = true;}
+		}
+		return isValid;
+	}
+
+	public bool isDouble(Object obj) {
+		// Method to check amount is of double format
+		try {
+			Double.valueOf(obj);
+		} catch (Exception ex){
+			return (false);
+		}
+		return (true);
 	}
 }
