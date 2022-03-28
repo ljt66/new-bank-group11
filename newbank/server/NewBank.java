@@ -1,26 +1,26 @@
 package newbank.server;
 
-import java.util.HashMap;
+		import java.util.HashMap;
 
 public class NewBank {
-	
+
 	private static final NewBank bank = new NewBank();
 	private HashMap<String,Customer> customers;
-	
+
 	private NewBank() {
 		customers = new HashMap<>();
 		addTestData();
 	}
-	
+
 	private void addTestData() {
 		Customer bhagy = new Customer();
 		bhagy.addAccount(new Account("Main", 1000.0));
 		customers.put("Bhagy", bhagy);
-		
+
 		Customer christina = new Customer();
 		christina.addAccount(new Account("Savings", 1500.0));
 		customers.put("Christina", christina);
-		
+
 		Customer john = new Customer();
 		john.addAccount(new Account("Checking", 250.0));
 		customers.put("John", john);
@@ -30,11 +30,11 @@ public class NewBank {
 		Customer customer = new Customer();
 		customers.put(name, customer);
 	}
-	
+
 	public static NewBank getBank() {
 		return bank;
 	}
-	
+
 	public synchronized CustomerID checkLogInDetails(String userName, String password) {
 		if(customers.containsKey(userName)) {
 			return new CustomerID(userName);
@@ -47,16 +47,18 @@ public class NewBank {
 		String[] req = request.split(" ");
 		if(customers.containsKey(customer.getKey())) {
 			switch(req[0]) {
-			case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
-			case "NEWACCOUNT":	return newAccount(customer, req[1]);
-			case "PAY": return payAccount(customer, req);
-			case "EXIT" : return "DISCONNECTING";
-			default : return "FAIL";
+				case "SHOWMYACCOUNTS" : return showMyAccounts(customer);
+				case "NEWACCOUNT":	return newAccount(customer, req[1]);
+				case "MOVE": return move(customer, req[1], req[2], req[3]);
+				case "PAY": return payAccount(customer, req);
+				case "PRINTMENU": return printMenu();
+				case "EXIT" : return "DISCONNECTING";
+				default : return "FAIL";
 			}
 		}
 		return "FAIL";
 	}
-	
+
 	//pays ammount requested from customer's first account with the correct balance
 	//to payee's first account
 	private String payAccount(CustomerID customer, String[] request) {
@@ -85,6 +87,35 @@ public class NewBank {
 		} else {
 			return "FAIL";
 		}
+	}
+
+	private String move (CustomerID customer, String moveAmount, String fromAccountName, toAccountName){
+		Customer c = customers.get(customer.getKey());
+		double amount = Double.parseDouble(moveAmount);
+		if (c.isValidAccount(fromAccountName) && c.isValidAccount(toAccountName) && c.isDouble(amount)){
+			if (fromAccountName >= toAccountName){
+				c.updateAccount(toAccountName, amount);
+				c.updateAccount(fromAccountName, -amount);
+				return "SUCCESS";
+			}
+			else{
+				return "FAIL";
+			}
+		}
+		else{
+			return "FAIL";
+		}
+	}
+
+	private String printMenu(){
+		String menu = "List of available commands:"
+				+ "\nSHOWMYACCOUNTS: display customer's accounts."
+				+ "\nNEWACCOUNT: add a new account to existing customer's accounts."
+				+ "\nMOVE: move requested amount between customer's accounts."
+				+ "\nPAY: pay requested amount to another customer's account."
+				+ "\nEXIT: log off from customer's account."
+				+ "\nPRINTMENU: review commands again.";
+		return menu;
 	}
 
 }
