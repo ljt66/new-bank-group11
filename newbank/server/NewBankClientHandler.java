@@ -13,6 +13,7 @@ public class NewBankClientHandler extends Thread{
 	private BufferedReader in;
 	private PrintWriter out;
 	private HashMap<String, Integer> commands;
+	private HashMap<String, Integer> adminCommands;
 	private String[] command_examples = {"SHOWMYACCOUNTS", "NEWACCOUNT name", "MOVE 0.00 From To", "PAY Payee 0.00", "EXIT", "PRINTMENU"};
 
 
@@ -20,6 +21,7 @@ public class NewBankClientHandler extends Thread{
 		bank = NewBank.getBank();
 		in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 		out = new PrintWriter(s.getOutputStream(), true);
+
 		commands = new HashMap<>();
 		commands.put("SHOWMYACCOUNTS", 1);
 		commands.put("NEWACCOUNT", 2);
@@ -27,6 +29,10 @@ public class NewBankClientHandler extends Thread{
 		commands.put("PAY", 3);
 		commands.put("EXIT", 1);
 		commands.put("PRINTMENU", 1);
+
+		adminCommands = new HashMap<>();
+		adminCommands.put("PRINTMENU", 1);
+		adminCommands.put("EXIT", 1);
 	}
 
 	public void run() {
@@ -42,7 +48,26 @@ public class NewBankClientHandler extends Thread{
 			// authenticate user and get customer ID token from bank for use in subsequent requests
 			CustomerID customer = bank.checkLogInDetails(userName, password);
 			// if the user is authenticated then get requests from the user and process them
-			if(customer != null) {
+			if(customer != null && customer.isAdmin()) {
+				out.println("Admin log In Successful. What do you want to do?");
+				while(true) {
+					String request = in.readLine();
+					String[] req = request.split(" ");
+					String responce;
+					if (adminCommands.containsKey(req[0]) && adminCommands.get(req[0]) == req.length) {
+						System.out.println("Received admin request.");
+						responce = bank.processAdminRequest(customer, request);
+					} else {
+						System.out.println("Invalid admin request.");
+						responce = "Admin command was invalid.";
+					}
+					out.println(responce);
+					if (responce.equals("DISCONNECTING")) {
+						break;
+					}
+				}
+			}
+			else if (customer != null) {
 				out.println("Log In Successful. What do you want to do?");
 				while(true) {
 					String request = in.readLine();
