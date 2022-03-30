@@ -65,13 +65,14 @@ public class Customer {
 		return isValid;
 	}
 
-	public bool isDouble(Object obj) {
-		// Method to check amount is of double format
-		try {
-			Double.valueOf(obj);
-		} catch (Exception ex){
-			return (false);
+	
+	public double getAmount(String name) {
+		double amt = 0.00;
+		for (Account account : accounts) {
+			if(account.getName().equals(name)){
+				amt = account.getBalance();
+			}
 		}
-		return (true);
+		return amt;
 	}
 }
