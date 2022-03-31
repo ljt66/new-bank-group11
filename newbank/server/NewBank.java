@@ -29,9 +29,10 @@ public class NewBank {
 		customers.put("John", john);
 	}
 
-	public void addCustomer(String name) {
+	public CustomerID addCustomer(String name) {
 		Customer customer = new Customer();
 		customers.put(name, customer);
+		return new CustomerID(name);
 	}
 
 	public static NewBank getBank() {
@@ -39,11 +40,13 @@ public class NewBank {
 	}
 
 	public synchronized CustomerID checkLogInDetails(String userName, String password) {
-		if(userName == adminUsername && password == adminPassword){
-			return new CustomerID(userName, true);
+		if(userName.equals(NewBank.adminUsername) && password.equals(NewBank.adminPassword)){
+			System.out.println("Successful admin log in: " + userName);
+			return new CustomerID(adminUsername, true);
 		}
 
 		if(customers.containsKey(userName)) {
+			System.out.println("Successful customer log in: " + userName);
 			return new CustomerID(userName);
 		}
 		return null;
@@ -71,7 +74,7 @@ public class NewBank {
 		String[] req = request.split(" ");
 		if(customer.isAdmin()) {
 			switch(req[0]) {
-				case "PRINTMENU": return printAdminMenu();
+				case "PRINTMENU" : return printAdminMenu();
 				case "EXIT" : return "DISCONNECTING";
 				default : return "FAIL";
 			}
