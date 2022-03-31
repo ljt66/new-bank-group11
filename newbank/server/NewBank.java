@@ -109,11 +109,11 @@ public class NewBank {
 		}
 	}
 
-	private String move (CustomerID customer, String moveAmount, String fromAccountName, toAccountName){
+	private String move (CustomerID customer, String moveAmount, String fromAccountName, String toAccountName){
 		Customer c = customers.get(customer.getKey());
 		double amount = Double.parseDouble(moveAmount);
-		if (c.isValidAccount(fromAccountName) && c.isValidAccount(toAccountName) && c.isDouble(amount)){
-			if (fromAccountName >= toAccountName){
+		if (c.isValidAccount(fromAccountName) && c.isValidAccount(toAccountName)){
+			if (c.getAmount(toAccountName) >= c.getAmount(toAccountName)){
 				c.updateAccount(toAccountName, amount);
 				c.updateAccount(fromAccountName, -amount);
 				return "SUCCESS";
