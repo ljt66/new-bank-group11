@@ -2,6 +2,9 @@ package newbank.server;
 
 		import java.util.HashMap;
 
+import newbank.server.SQL.Account_SQL;
+import newbank.server.SQL.Customer_SQL;
+
 public class NewBank {
 
 	private static final NewBank bank = new NewBank();
@@ -13,21 +16,21 @@ public class NewBank {
 	}
 
 	private void addTestData() {
-		Customer bhagy = new Customer();
-		bhagy.addAccount(new Account("Main", 1000.0));
+		Customer bhagy = new Customer(1, "Bhagy");
+		bhagy.addAccount(new Account(1, "Main", 1000.0));
 		customers.put("Bhagy", bhagy);
 
-		Customer christina = new Customer();
-		christina.addAccount(new Account("Savings", 1500.0));
+		Customer christina = new Customer(2, "Christina");
+		christina.addAccount(new Account(2, "Savings", 1500.0));
 		customers.put("Christina", christina);
 
-		Customer john = new Customer();
-		john.addAccount(new Account("Checking", 250.0));
+		Customer john = new Customer(3, "John");
+		john.addAccount(new Account(3, "Checking", 250.0));
 		customers.put("John", john);
 	}
 
 	public void addCustomer(String name) {
-		Customer customer = new Customer();
+		Customer customer = new Customer(4, name);
 		customers.put(name, customer);
 	}
 
@@ -80,13 +83,16 @@ public class NewBank {
 	}
 
 	private String newAccount(CustomerID customer, String name) {
-		Customer c = customers.get(customer.getKey());
+		Customer c = Customer_SQL.getCustomer(customer.getKey());
 		if (c.isNewAccountNameValid(name)) {
-			c.addAccount(new Account(name, 0));
-			return "SUCCESS";
-		} else {
-			return "FAIL";
+			int accountID = Account_SQL.insertAccount(c.getCustomerID(), name, 0);
+			if(accountID != -1)
+			{
+				c.addAccount(new Account(accountID, name, 0));
+				return "SUCCESS";
+			}
 		}
+			return "FAIL";
 	}
 
 	private String move (CustomerID customer, String moveAmount, String fromAccountName, String toAccountName){

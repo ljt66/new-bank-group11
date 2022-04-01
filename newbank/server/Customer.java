@@ -4,10 +4,24 @@ package newbank.server;
 
 public class Customer {
 
+	private int customerID;
+	private String customerName;
 	private ArrayList<Account> accounts;
 
-	public Customer() {
+	public Customer(int customerID, String customerName) {
+		this.customerID = customerID;
+		this.customerName = customerName;
 		accounts = new ArrayList<>();
+	}
+	
+	public int getCustomerID()
+	{
+		return this.customerID;
+	}
+	
+	public String getCustomerName()
+	{
+		return this.customerName;
 	}
 
 	public String accountsToString() {
