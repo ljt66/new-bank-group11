@@ -60,12 +60,10 @@ public class NewBank {
 
 	public synchronized CustomerID checkLogInDetails(String userName, String password) {
 		if(userName.equals(NewBank.adminUsername) && password.equals(NewBank.adminPassword)){
-			System.out.println("Successful admin log in: " + userName);
 			return new CustomerID(adminUsername, true);
 		}
 
 		if(customers.containsKey(userName)) {
-			System.out.println("Successful customer log in: " + userName);
 			return new CustomerID(userName);
 		}
 		return null;
