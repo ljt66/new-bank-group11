@@ -30,9 +30,28 @@ public class NewBank {
 	}
 
 	public CustomerID addCustomer(String name) {
-		Customer customer = new Customer();
-		customers.put(name, customer);
-		return new CustomerID(name);
+		if(customers.containsKey(name)) {
+			return null;
+		}
+		else {
+			Customer customer = new Customer();
+			customers.put(name, customer);
+			return new CustomerID(name);
+		}
+	}
+
+	public String registerNewCustomer(String name, String password, String account) {
+		CustomerID customer = addCustomer(name);
+		if (customer == null) {
+			return "FAIL : CANNOT ADD CUSTOMER";
+		}
+		else {
+			return newAccount(customer, name);
+		}
+	}
+
+	public String listCustomers() {
+		return String.join(" ", customers.keySet());
 	}
 
 	public static NewBank getBank() {
@@ -74,12 +93,14 @@ public class NewBank {
 		String[] req = request.split(" ");
 		if(customer.isAdmin()) {
 			switch(req[0]) {
+				case "NEWCUSTOMER" : return registerNewCustomer(req[1], req[2], req[3]);
+				case "SHOWCUSTOMERS" : return listCustomers();
 				case "PRINTMENU" : return printAdminMenu();
 				case "EXIT" : return "DISCONNECTING";
-				default : return "FAIL";
+				default : return "FAIL : INVALID COMMAND";
 			}
 		}
-		return "FAIL";
+		return "FAIL : NOT AN ADMIN";
 	}
 
 	//pays ammount requested from customer's first account with the correct balance
