@@ -65,7 +65,6 @@ public class Customer {
 		return isValid;
 	}
 
-	
 	public double getAmount(String name) {
 		double amt = 0.00;
 		for (Account account : accounts) {

@@ -1,11 +1,14 @@
 package newbank.server;
 
-		import java.util.HashMap;
+import java.util.HashMap;
 
 public class NewBank {
 
 	private static final NewBank bank = new NewBank();
 	private HashMap<String,Customer> customers;
+
+	public static final String adminUsername = "ADMIN";
+	public static final String adminPassword = "password";
 
 	private NewBank() {
 		customers = new HashMap<>();
@@ -26,9 +29,10 @@ public class NewBank {
 		customers.put("John", john);
 	}
 
-	public void addCustomer(String name) {
+	public CustomerID addCustomer(String name) {
 		Customer customer = new Customer();
 		customers.put(name, customer);
+		return new CustomerID(name);
 	}
 
 	public static NewBank getBank() {
@@ -36,6 +40,10 @@ public class NewBank {
 	}
 
 	public synchronized CustomerID checkLogInDetails(String userName, String password) {
+		if(userName.equals(NewBank.adminUsername) && password.equals(NewBank.adminPassword)){
+			return new CustomerID(adminUsername, true);
+		}
+
 		if(customers.containsKey(userName)) {
 			return new CustomerID(userName);
 		}
@@ -52,6 +60,19 @@ public class NewBank {
 				case "MOVE": return move(customer, req[1], req[2], req[3]);
 				case "PAY": return payAccount(customer, req);
 				case "PRINTMENU": return printMenu();
+				case "EXIT" : return "DISCONNECTING";
+				default : return "FAIL";
+			}
+		}
+		return "FAIL";
+	}
+
+	// commands from the NewBank customer are processed in this method
+	public synchronized String processAdminRequest(CustomerID customer, String request) {
+		String[] req = request.split(" ");
+		if(customer.isAdmin()) {
+			switch(req[0]) {
+				case "PRINTMENU" : return printAdminMenu();
 				case "EXIT" : return "DISCONNECTING";
 				default : return "FAIL";
 			}
@@ -114,6 +135,13 @@ public class NewBank {
 				+ "\nMOVE: move requested amount between customer's accounts."
 				+ "\nPAY: pay requested amount to another customer's account."
 				+ "\nEXIT: log off from customer's account."
+				+ "\nPRINTMENU: review commands again.";
+		return menu;
+	}
+
+	private String printAdminMenu(){
+		String menu = "List of available commands:"
+				+ "\nEXIT: log off from admin interface."
 				+ "\nPRINTMENU: review commands again.";
 		return menu;
 	}
