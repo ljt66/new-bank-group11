@@ -103,7 +103,7 @@ public class TestServer {
    }
 
    @Test
-   public void testAdminRegisterNewCustomer() {
+   public void testAdminCommands() {
       CustomerID admin = new CustomerID(NewBank.adminUsername, true);
 
       result = bank.processAdminRequest(admin, "NEWCUSTOMER TestName1 TestPassword1 TestAccount1");
@@ -117,5 +117,8 @@ public class TestServer {
 
       result = bank.processAdminRequest(admin, "SHOWCUSTOMERS");
       assertEquals("TestName1 TestName2 John Christina Bhagy", result);
+
+      result = bank.processAdminRequest(admin, "INCORRECTCOMMENT");
+      assertEquals("FAIL : INVALID COMMAND", result);
    }
 }
