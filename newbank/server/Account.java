@@ -9,7 +9,7 @@ public class Account{
          * @param openingBalance This is the initial deposit amount.
          * @param accountOpenDate This is the date the account was created. LocalDate object expects the format "YYYY-MM-DD".
          */
-   
+   protected int accountID;
     protected LocalDate accountOpenDate; 
     protected String accountName;
     protected double openingBalance;
@@ -19,7 +19,7 @@ public class Account{
     };
     protected AccountType accountType;
 
-    public Account(String accountName, AccountType accountType, double openingBalance, LocalDate accountOpenDate) {
+    public Account(int accountID, String accountName, AccountType accountType, double openingBalance, LocalDate accountOpenDate) {
         /**
          * This is the constructor for an account and this expects the following arguments:
          * @param accountName This is the name of the account holder as a String
@@ -27,13 +27,18 @@ public class Account{
          * @param openingBalance This is the initial deposit amount.
          * @param accountOpenDate This is the date the account was created. LocalDate object expects the format "YYYY-MM-DD".
          */
-
+        this.accountID = accountID;
         this.accountName = accountName;
         this.openingBalance = openingBalance;
         this.accountType = accountType;
         this.accountOpenDate = accountOpenDate;
     }
 
+    public int getAccountID()
+	{
+		return this.accountID;
+	}
+    
     public String getName() {
         return accountName;
     }

@@ -18,17 +18,16 @@ public class NewBank {
 	}
 
 	private void addTestData() {
-		Customer bhagy = new Customer();
-		bhagy.addAccount(new CurrentAccount("Checking", Account.AccountType.current, 1000.0, LocalDate.of(2022, 01, 01)));
+		Customer bhagy = new Customer(1, "Bhagy");
+		bhagy.addAccount(new Account(1, "Main", 1000.0));
 		customers.put("Bhagy", bhagy);
 
-		Customer christina = new Customer();
-		christina.addAccount(new CurrentAccount("Checking", Account.AccountType.current, 1500.0, LocalDate.of(2022, 01, 01)));
+		Customer christina = new Customer(2, "Christina");
+		christina.addAccount(new Account(2, "Savings", 1500.0));
 		customers.put("Christina", christina);
 
-		Customer john = new Customer();
-		john.addAccount(new FixedDepositAccount("Checking", Account.AccountType.fixedDeposit, 100.0, LocalDate.of(2022, 01, 01), 5));
-		customers.put("John", john);
+		Customer john = new Customer(3, "John");
+		john.addAccount(new Account(3, "Checking", 250.0));
 	}
 
 	public CustomerID addCustomer(String name) {
