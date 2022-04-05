@@ -1,7 +1,7 @@
 package newbank.server;
 import java.time.*;
 
-abstract class Account implements IFeesAndInterest{
+public class Account{
     /**
          * This is the constructor for an account and this expects the following arguments:
          * @param accountName This is the name of the account holder as a String

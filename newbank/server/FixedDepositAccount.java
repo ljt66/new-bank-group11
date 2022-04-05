@@ -1,7 +1,7 @@
 package newbank.server;
 import java.time.*;
 
-public class FixedDepositAccount extends Account{
+public class FixedDepositAccount extends Account implements IFeesAndInterest{
     // As a subclass of Account, Fixed Deposit extends features of Account to
     // charge prohibit withdrawls if the fixed period has not expired and pays a
     // higher rate of interest

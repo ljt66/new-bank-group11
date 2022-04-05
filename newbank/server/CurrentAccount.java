@@ -2,7 +2,7 @@ package newbank.server;
 
 import java.time.LocalDate;
 
-public class CurrentAccount extends Account{
+public class CurrentAccount extends Account implements IFeesAndInterest{
     //As a subclass of Account, Current Account extends features of Account to charge monthly maintanance costs and pay a low monthly interest.
     float maintananceCostPerMonth = 6.50f;
     float annualInterestRate = 0.5f;
