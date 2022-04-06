@@ -101,4 +101,24 @@ public class TestServer {
       assertEquals(NewBank.adminUsername, user.getKey());
       assertTrue(user.isAdmin());
    }
+
+   @Test
+   public void testAdminCommands() {
+      CustomerID admin = new CustomerID(NewBank.adminUsername, true);
+
+      result = bank.processAdminRequest(admin, "NEWCUSTOMER TestName1 TestPassword1 TestAccount1");
+      assertEquals("SUCCESS", result);
+      
+      result = bank.processAdminRequest(admin, "NEWCUSTOMER TestName1 TestPassword1 TestAccount1");
+      assertEquals("FAIL : CANNOT ADD CUSTOMER", result);
+      
+      result = bank.processAdminRequest(admin, "NEWCUSTOMER TestName2 TestPassword2 TestAccount2");
+      assertEquals("SUCCESS", result);
+
+      result = bank.processAdminRequest(admin, "SHOWCUSTOMERS");
+      assertEquals("TestName1 TestName2 John Christina Bhagy", result);
+
+      result = bank.processAdminRequest(admin, "INCORRECTCOMMENT");
+      assertEquals("FAIL : INVALID COMMAND", result);
+   }
 }
