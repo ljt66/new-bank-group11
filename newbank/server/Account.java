@@ -19,6 +19,7 @@ public class Account{
     };
     protected AccountType accountType;
 
+
     public Account(int accountID, String accountName, double openingBalance) {
         /**
          * This is the constructor for an account and this expects the following arguments:
@@ -55,6 +56,7 @@ public class Account{
     public String getName() {
         return accountName;
     }
+
 
     public double getBalance() {
         return openingBalance;

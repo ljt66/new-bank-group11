@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.time.*;
 
 
+import newbank.server.SQL.Account_SQL;
+import newbank.server.SQL.Customer_SQL;
+
 public class NewBank {
 
 	private static final NewBank bank = new NewBank();
@@ -18,6 +21,7 @@ public class NewBank {
 	}
 
 	private void addTestData() {
+
 		Customer bhagy = new Customer();
 		bhagy.addAccount(new Account(1, "Main", 1000.0));
 		customers.put("Bhagy", bhagy);
@@ -28,12 +32,32 @@ public class NewBank {
 
 		Customer john = new Customer();
 		john.addAccount(new Account(3, "Checking", 250.0));
+
 	}
 
 	public CustomerID addCustomer(String name) {
-		Customer customer = new Customer();
-		customers.put(name, customer);
-		return new CustomerID(name);
+		if(customers.containsKey(name)) {
+			return null;
+		}
+		else {
+			Customer customer = new Customer();
+			customers.put(name, customer);
+			return new CustomerID(name);
+		}
+	}
+
+	public String registerNewCustomer(String name, String password, String account) {
+		CustomerID customer = addCustomer(name);
+		if (customer == null) {
+			return "FAIL : CANNOT ADD CUSTOMER";
+		}
+		else {
+			return newAccount(customer, name);
+		}
+	}
+
+	public String listCustomers() {
+		return String.join(" ", customers.keySet());
 	}
 
 	public static NewBank getBank() {
@@ -73,12 +97,14 @@ public class NewBank {
 		String[] req = request.split(" ");
 		if(customer.isAdmin()) {
 			switch(req[0]) {
+				case "NEWCUSTOMER" : return registerNewCustomer(req[1], req[2], req[3]);
+				case "SHOWCUSTOMERS" : return listCustomers();
 				case "PRINTMENU" : return printAdminMenu();
 				case "EXIT" : return "DISCONNECTING";
-				default : return "FAIL";
+				default : return "FAIL : INVALID COMMAND";
 			}
 		}
-		return "FAIL";
+		return "FAIL : NOT AN ADMIN";
 	}
 
 	//pays ammount requested from customer's first account with the correct balance
@@ -102,13 +128,17 @@ public class NewBank {
 	}
 
 	private String newAccount(CustomerID customer, String name) {
-		Customer c = customers.get(customer.getKey());
+		Customer c = Customer_SQL.getCustomer(customer.getKey());
 		if (c.isNewAccountNameValid(name)) {
-			c.addAccount(new CurrentAccount(11 , name, 1000.0));
-			return "SUCCESS";
-		} else {
-			return "FAIL";
+			int accountID = Account_SQL.insertAccount(c.getCustomerID(), name, 0);
+			if(accountID != -1)
+			{
+				c.addAccount(new Account(accountID, name, 0));
+				return "SUCCESS";
+			}
+
 		}
+			return "FAIL";
 	}
 
 	private String move (CustomerID customer, String moveAmount, String fromAccountName, String toAccountName){
