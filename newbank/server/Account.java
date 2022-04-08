@@ -19,7 +19,21 @@ public class Account{
     };
     protected AccountType accountType;
 
-    public Account(int accountID, String accountName, AccountType accountType, double openingBalance, LocalDate accountOpenDate) {
+    public Account(int accountID, String accountName, double openingBalance) {
+        /**
+         * This is the constructor for an account and this expects the following arguments:
+         * @param accountName This is the name of the account holder as a String
+         * @param accountType This is the type of account expected from the set enum AccountType. This can only be one of the following "checking", "savings" or "fixed deposit".
+         * @param openingBalance This is the initial deposit amount.
+         * @param accountOpenDate This is the date the account was created. LocalDate object expects the format "YYYY-MM-DD".
+         */
+        this.accountID = accountID;
+        this.accountName = accountName;
+        this.openingBalance = openingBalance;
+        this.accountOpenDate = LocalDate.now();
+    }
+
+    public Account(int accountID,  String accountName, AccountType accountType ,double openingBalance) {
         /**
          * This is the constructor for an account and this expects the following arguments:
          * @param accountName This is the name of the account holder as a String
@@ -31,9 +45,8 @@ public class Account{
         this.accountName = accountName;
         this.openingBalance = openingBalance;
         this.accountType = accountType;
-        this.accountOpenDate = accountOpenDate;
+        this.accountOpenDate = LocalDate.now();
     }
-
     public int getAccountID()
 	{
 		return this.accountID;

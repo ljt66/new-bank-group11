@@ -18,15 +18,15 @@ public class NewBank {
 	}
 
 	private void addTestData() {
-		Customer bhagy = new Customer(1, "Bhagy");
+		Customer bhagy = new Customer();
 		bhagy.addAccount(new Account(1, "Main", 1000.0));
 		customers.put("Bhagy", bhagy);
 
-		Customer christina = new Customer(2, "Christina");
+		Customer christina = new Customer();
 		christina.addAccount(new Account(2, "Savings", 1500.0));
 		customers.put("Christina", christina);
 
-		Customer john = new Customer(3, "John");
+		Customer john = new Customer();
 		john.addAccount(new Account(3, "Checking", 250.0));
 	}
 
@@ -104,7 +104,7 @@ public class NewBank {
 	private String newAccount(CustomerID customer, String name) {
 		Customer c = customers.get(customer.getKey());
 		if (c.isNewAccountNameValid(name)) {
-			c.addAccount(new CurrentAccount(name, Account.AccountType.current, 1000.0, LocalDate.now()));
+			c.addAccount(new CurrentAccount(11 , name, 1000.0));
 			return "SUCCESS";
 		} else {
 			return "FAIL";

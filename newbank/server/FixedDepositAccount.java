@@ -10,10 +10,11 @@ public class FixedDepositAccount extends Account implements IFeesAndInterest{
     float maximumInterestRate = 10; // maximum interest rate for a maximum fixed deposit term
     int maximumFixedDepositTerm = 36; // Three year maximum fixed deposit term
 
-    FixedDepositAccount(int accountID, String accountName, AccountType accountType, double openingBalance, LocalDate accountOpenDate,
+    FixedDepositAccount(int accountID, String accountName, AccountType accountType, double openingBalance,
             int fixedDepositTerm) {
-        super(accountID, accountName, accountType, openingBalance, accountOpenDate);
+        super(accountID, accountName, accountType, openingBalance);
         this.fixedDepositTerm = fixedDepositTerm;
+        this.accountOpenDate = LocalDate.now();
     }
 
     double calculateMonthlyInterestRate(int fixedDepositTerm) {

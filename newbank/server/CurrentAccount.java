@@ -7,8 +7,10 @@ public class CurrentAccount extends Account implements IFeesAndInterest{
     float maintananceCostPerMonth = 6.50f;
     float annualInterestRate = 0.5f;
 
-    CurrentAccount(int accountID, String accountName, AccountType accountType, double openingBalance, LocalDate accountOpenDate){
-        super(accountID, accountName, accountType, openingBalance, accountOpenDate);
+    CurrentAccount(int accountID, String accountName, double openingBalance){
+        super(accountID, accountName, openingBalance);
+        this.accountType = AccountType.current;
+        this.accountOpenDate = LocalDate.now();
     }
 
     public void chargeMaintenance(){
