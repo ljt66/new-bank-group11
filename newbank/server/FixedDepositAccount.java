@@ -1,7 +1,7 @@
 package newbank.server;
 import java.time.*;
 
-public class FixedDepositAccount extends Account implements IFeesAndInterest{
+public class FixedDepositAccount extends Account{
     // As a subclass of Account, Fixed Deposit extends features of Account to
     // charge prohibit withdrawls if the fixed period has not expired and pays a
     // higher rate of interest
@@ -10,10 +10,10 @@ public class FixedDepositAccount extends Account implements IFeesAndInterest{
     float maximumInterestRate = 10; // maximum interest rate for a maximum fixed deposit term
     int maximumFixedDepositTerm = 36; // Three year maximum fixed deposit term
 
-    FixedDepositAccount(int accountID, String accountName, AccountType accountType, double openingBalance,
-            int fixedDepositTerm) {
-        super(accountID, accountName, accountType, openingBalance);
+    FixedDepositAccount(int accountID, String accountName,  double openingBalance, int fixedDepositTerm) {
+        super(accountID, accountName,  openingBalance);
         this.fixedDepositTerm = fixedDepositTerm;
+        this.accountType = AccountType.fixedDeposit;
         this.accountOpenDate = LocalDate.now();
     }
 
@@ -21,8 +21,7 @@ public class FixedDepositAccount extends Account implements IFeesAndInterest{
         if (fixedDepositTerm > maximumFixedDepositTerm) {
             fixedDepositTerm = maximumFixedDepositTerm;
         }
-        
-        return  (double) fixedDepositTerm / (double) maximumFixedDepositTerm * 2.000f;
+        return  (double) fixedDepositTerm / (double) maximumFixedDepositTerm;
     }
 
     @Override
@@ -36,7 +35,6 @@ public class FixedDepositAccount extends Account implements IFeesAndInterest{
     @Override
     public String payInterest(double interestRate) {
         double oldbalance = openingBalance;
-    
         double newbalance = openingBalance * (1 + interestRate/ 100f / 12f);
         String s = String.format("SUCCESS: INTEREST PAID | old balance: %f | new balance: %f", oldbalance, newbalance);
         System.out.println(s);
